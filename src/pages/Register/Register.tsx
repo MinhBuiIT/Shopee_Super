@@ -4,13 +4,15 @@ import Input from 'src/components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ResYup, schemaRes } from 'src/utils/rules'
 import { useMutation } from '@tanstack/react-query'
-import { registerPost } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { isUnprocessableEntityErr } from 'src/utils/util'
 import { ErrorType } from 'src/types/ErrorType.type'
 import { useContext } from 'react'
 import { AuthConext } from 'src/contexts/AppContextAuth'
 import Button from 'src/components/Button'
 
+const schemaResgister = schemaRes.pick(['password', 'confirmPassword', 'email'])
+type FormResgister = Pick<ResYup, 'confirmPassword' | 'email' | 'password'>
 export default function Register() {
   const { setIsAuthentication, setProfile } = useContext(AuthConext)
   const navigate = useNavigate()
@@ -19,11 +21,11 @@ export default function Register() {
     formState: { errors },
     setError,
     handleSubmit
-  } = useForm<ResYup>({
-    resolver: yupResolver(schemaRes)
+  } = useForm<FormResgister>({
+    resolver: yupResolver(schemaResgister)
   })
   const registerMutation = useMutation({
-    mutationFn: (body: Omit<ResYup, 'confirmPassword'>) => registerPost(body)
+    mutationFn: (body: Omit<ResYup, 'confirmPassword'>) => authApi.registerPost(body)
   })
   const onSubmit = handleSubmit((data) => {
     registerMutation.mutate(data, {
@@ -37,7 +39,7 @@ export default function Register() {
           const formError = err.response?.data
           if (formError !== undefined) {
             Object.keys(formError.data).forEach((key) => {
-              setError(key as keyof Omit<ResYup, 'confirmPassword'>, {
+              setError(key as keyof Omit<FormResgister, 'confirmPassword'>, {
                 type: 'server',
                 message: formError?.data[key as keyof Omit<ResYup, 'confirmPassword'>]
               })

@@ -1,5 +1,6 @@
 import { User } from 'src/types/User.type'
 
+const event = new Event('clearAll')
 export const getAccessTKFromLC = () => {
   return localStorage.getItem('access_token')
 }
@@ -17,4 +18,9 @@ export const getUserFromLC = (): User | null => {
 }
 export const clearKeyLC = (key: string) => {
   localStorage.removeItem(key)
+}
+export const clearAll = () => {
+  document.dispatchEvent(event)
+  localStorage.removeItem('user')
+  localStorage.removeItem('access_token')
 }

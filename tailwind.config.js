@@ -15,7 +15,8 @@ export default {
         greenPrimary: '#00bfa5',
         'gray-medium': '#f7f7f7',
         'gray-light': '#f5f5f5',
-        'gray-bold': '#ededed'
+        'gray-bold': '#ededed',
+        'orange-light': 'rgba(255, 87, 34)'
       },
       backgroundImage: {
         primary: 'linear-gradient(-180deg,#f53d2d,#f63)'
@@ -23,6 +24,7 @@ export default {
     }
   },
   plugins: [
+    require('@tailwindcss/line-clamp'),
     plugin(function ({ addComponents, theme }) {
       addComponents({
         '.container': {
@@ -33,7 +35,6 @@ export default {
           paddingRight: '1rem'
         }
       })
-    }),
-    require('@tailwindcss/line-clamp')
+    })
   ]
 }

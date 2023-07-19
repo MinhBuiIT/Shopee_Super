@@ -1,9 +1,8 @@
 import axios, { AxiosInstance, AxiosError } from 'axios'
-import { HttpStatusCode } from 'src/contants/HttpStatus'
 import { toast } from 'react-toastify'
 import { ResponseMessage } from 'src/types/Response.type'
 import { AuthType } from 'src/types/Auth.type'
-import { clearKeyLC, getAccessTKFromLC, saveAccessTKToLC, saveUserTKToLC } from './authLocal'
+import { clearAll, clearKeyLC, getAccessTKFromLC, saveAccessTKToLC, saveUserTKToLC } from './authLocal'
 import { Path } from 'src/contants/path'
 class Http {
   instance: AxiosInstance
@@ -46,10 +45,13 @@ class Http {
         return response
       },
       (err: AxiosError) => {
-        if (err.response?.status === HttpStatusCode.NotFound) {
-          const dataErr: ResponseMessage | undefined = err.response.data as ResponseMessage
-          const message = dataErr.message || err.message
+        if (err.response?.status !== 401) {
+          const dataErr: ResponseMessage | undefined = err.response?.data as ResponseMessage
+          const message = dataErr?.message || err.message
           toast.error(message)
+        }
+        if (err.response?.status === 401) {
+          clearAll()
         }
         return Promise.reject(err)
       }

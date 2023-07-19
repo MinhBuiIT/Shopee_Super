@@ -10,8 +10,8 @@ export default function Button({ children, className, isLoading, addClass, ...re
     <button
       className={
         (className ||
-          ` w-full rounded-sm bg-orange text-center text-base font-normal uppercase text-white hover:opacity-90 ${
-            addClass || ''
+          ` rounded-sm bg-orange text-center text-base font-normal uppercase text-white hover:opacity-90 ${
+            addClass || 'w-full'
           }`) + `${isLoading ? ' cursor-not-allowed opacity-90' : ''}`
       }
       {...rest}

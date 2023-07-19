@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { loginPost } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import Input from 'src/components/Input'
 import { LoginYup, schemaLogin } from 'src/utils/rules'
 import { isUnprocessableEntityErr } from 'src/utils/util'
@@ -23,7 +23,7 @@ export default function Login() {
     resolver: yupResolver(schemaLogin)
   })
   const loginMutation = useMutation({
-    mutationFn: (body: LoginYup) => loginPost(body)
+    mutationFn: (body: LoginYup) => authApi.loginPost(body)
   })
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {

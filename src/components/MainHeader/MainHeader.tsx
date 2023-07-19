@@ -1,22 +1,41 @@
-import { Link, useNavigate } from 'react-router-dom'
-import Popover from '../Popover'
-import { useMutation } from '@tanstack/react-query'
-import { logoutPage } from 'src/apis/auth.api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import authApi from 'src/apis/auth.api'
+import purchaseApi from 'src/apis/purchase.api'
+import img from 'src/assets'
+import { PurchaseStatusConst } from 'src/contants/PurchaseStatus'
+import { Path } from 'src/contants/path'
 import { AuthConext } from 'src/contexts/AppContextAuth'
+import useSearchHeader from 'src/hooks/useSearchHeader'
+import { createLinkAvt, formatPrice } from 'src/utils/util'
+import Popover from '../Popover'
 
+const LIMIT_CART = 5
 export default function MainHeader() {
-  const { setIsAuthentication, profile, setProfile } = useContext(AuthConext)
+  const { register, onSubmit } = useSearchHeader()
+  const queryClient = useQueryClient()
+  const { setIsAuthentication, profile, setProfile, isAuthentication } = useContext(AuthConext)
+
   const navigate = useNavigate()
+
+  const { data: purchasesData } = useQuery({
+    queryKey: ['purchases', { status: PurchaseStatusConst.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: PurchaseStatusConst.inCart }),
+    enabled: isAuthentication
+  })
+
   const logoutMutation = useMutation({
-    mutationFn: () => logoutPage()
+    mutationFn: () => authApi.logoutPage()
   })
   const handleLogout = () => {
+    queryClient.removeQueries(['purchases', { status: PurchaseStatusConst.inCart }])
     logoutMutation.mutate()
     setIsAuthentication(false)
     setProfile(null)
-    navigate('/login')
+    navigate('/')
   }
+
   return (
     <div className='bg-primary pb-5 pt-3'>
       <div className='container'>
@@ -79,21 +98,41 @@ export default function MainHeader() {
                 element={
                   <>
                     <div className='mr-1 h-6 w-6'>
-                      <img
-                        src='https://images.viblo.asia/1d949589-afdd-4a1e-b77f-c53fdaf8af13.png'
-                        alt='User'
-                        className='h-full w-full rounded-full'
-                      />
+                      {profile?.avatar ? (
+                        <img
+                          src={createLinkAvt(profile?.avatar)}
+                          alt='Avatar'
+                          className='h-full w-full rounded-full object-cover'
+                        />
+                      ) : (
+                        <svg
+                          enableBackground='new 0 0 15 15'
+                          viewBox='0 0 15 15'
+                          x={0}
+                          y={0}
+                          className=' h-[20px] w-[20px] stroke-[#c6c6c6]'
+                        >
+                          <g>
+                            <circle cx='7.5' cy='4.5' fill='none' r='3.8' strokeMiterlimit={10} />
+                            <path
+                              d='m1.5 14.2c0-3.3 2.7-6 6-6s6 2.7 6 6'
+                              fill='none'
+                              strokeLinecap='round'
+                              strokeMiterlimit={10}
+                            />
+                          </g>
+                        </svg>
+                      )}
                     </div>
                     <span>{profile.email}</span>
                   </>
                 }
               >
                 <div className='flex w-40 flex-col rounded-sm bg-white py-3 pl-3 text-gray-700 shadow'>
-                  <Link to='/' className='text-sm hover:text-greenPrimary'>
+                  <Link to={'/' + Path.user + '/' + Path.profile} className='text-sm hover:text-greenPrimary'>
                     Tài khoản của tôi
                   </Link>
-                  <Link to='/' className='mt-4 text-sm hover:text-greenPrimary'>
+                  <Link to={'/' + Path.cart} className='mt-4 text-sm hover:text-greenPrimary'>
                     Đơn mua
                   </Link>
                   <button
@@ -118,12 +157,13 @@ export default function MainHeader() {
             </Link>
           </div>
           <div className='col-span-9 w-[90%]'>
-            <form className='flex w-full justify-between rounded-sm bg-white pl-4 pr-1'>
+            <form className='flex w-full justify-between rounded-sm bg-white pl-4 pr-1' onSubmit={onSubmit}>
               <input
                 type='text'
                 id='search'
                 placeholder='Tìm kiếm sản phẩm'
                 className='mr-3 w-[90%] py-3 outline-none'
+                {...register('search')}
               />
               <button className='my-1 flex w-[8%] items-center justify-center rounded-sm bg-orange py-2 text-white hover:brightness-110'>
                 <svg
@@ -149,84 +189,78 @@ export default function MainHeader() {
               isScale
               placementMode='bottom-end'
               element={
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={1.5}
-                  stroke='currentColor'
-                  className='h-6 w-6 text-white'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-                  />
-                </svg>
+                <Link to={`/${Path.cart}`} className='relative outline-none'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='h-6 w-6 text-white'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                    />
+                  </svg>
+                  {purchasesData && (
+                    <span className='absolute right-[-12px] top-[-6px] w-fit rounded-full border-[1px] border-orange bg-white px-2 text-center text-xs font-light text-orange'>
+                      {purchasesData.data.data.length}
+                    </span>
+                  )}
+                </Link>
               }
             >
-              <div className=' w-[400px] rounded-sm bg-white py-3 shadow'>
-                <h3 className='pl-3 text-[15px] font-light text-gray-300'>Sản Phẩm Mới Thêm</h3>
-                <div className='mt-4 flex flex-col'>
-                  <div className='flex w-full items-start justify-between py-2 pl-3 hover:bg-gray-100'>
-                    <div className='h-[42px] w-[42px] border-[1px] border-solid border-gray-400'>
-                      <img
-                        src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lhctcb4fwr8z99_tn'
-                        alt='San Pham'
-                        className='h-full w-full object-cover'
-                      />
+              {purchasesData && purchasesData.data.data.length !== 0 ? (
+                <div className=' w-[400px] rounded-sm bg-white py-3 shadow'>
+                  <h3 className='pl-3 text-[15px] font-light text-gray-300'>Sản Phẩm Mới Thêm</h3>
+                  <div className='mt-4 flex flex-col'>
+                    {purchasesData.data.data.slice(0, LIMIT_CART).map((item) => {
+                      return (
+                        <div
+                          className='mt-1 flex w-full items-start justify-between py-2 pl-3 hover:bg-gray-100'
+                          key={item._id}
+                        >
+                          <div className='h-[42px] w-[42px] border-[1px] border-solid border-slate-100'>
+                            <img
+                              src={item.product.image}
+                              alt={item.product.name}
+                              className='h-full w-full object-cover'
+                            />
+                          </div>
+                          <div className='max-w-[68%] truncate text-sm font-light text-gray-600'>
+                            {item.product.name}
+                          </div>
+                          <div className='pr-3 text-end text-sm font-light text-orange'>
+                            {formatPrice(item.product.price)}
+                          </div>
+                        </div>
+                      )
+                    })}
+
+                    <div className=' my-2 flex items-center justify-between px-3'>
+                      <p className='text-xs font-light text-gray-500'>
+                        {purchasesData.data.data.length - LIMIT_CART > 0
+                          ? purchasesData.data.data.length - LIMIT_CART
+                          : ''}{' '}
+                        Thêm Hàng Vào Giỏ
+                      </p>
+                      <Link
+                        to={'/' + Path.cart}
+                        className=' w-32 rounded-sm bg-orange py-2 text-center text-base text-white hover:brightness-110'
+                      >
+                        Xem Giỏ Hàng
+                      </Link>
                     </div>
-                    <div className='max-w-[68%] truncate text-sm font-light text-gray-600'>
-                      Kem Mụn SANTAGIFT - Trắng sáng - Ức chế sắt tố - Chống nắng - 20g
-                    </div>
-                    <div className='pr-3 text-end text-sm font-light text-orange'>155.000đ</div>
-                  </div>
-                  <div className='mt-2 flex w-full items-start justify-between py-2 pl-3 hover:bg-gray-100'>
-                    <div className='h-[42px] w-[42px] border-[1px] border-solid border-gray-400'>
-                      <img
-                        src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lhctcb4fwr8z99_tn'
-                        alt='San Pham'
-                        className='h-full w-full object-cover'
-                      />
-                    </div>
-                    <div className='max-w-[68%] truncate text-sm font-light text-gray-600'>
-                      Kem Mụn SANTAGIFT - Trắng sáng - Ức chế sắt tố - Chống nắng - 20g
-                    </div>
-                    <div className='pr-3 text-end text-sm font-light text-orange'>155.000đ</div>
-                  </div>
-                  <div className='mt-2 flex w-full items-start justify-between py-2 pl-3 hover:bg-gray-100'>
-                    <div className='h-[42px] w-[42px] border-[1px] border-solid border-gray-400'>
-                      <img
-                        src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lhctcb4fwr8z99_tn'
-                        alt='San Pham'
-                        className='h-full w-full object-cover'
-                      />
-                    </div>
-                    <div className='max-w-[68%] truncate text-sm font-light text-gray-600'>
-                      Kem Mụn SANTAGIFT - Trắng sáng - Ức chế sắt tố - Chống nắng - 20g
-                    </div>
-                    <div className='pr-3 text-end text-sm font-light text-orange'>155.000đ</div>
-                  </div>
-                  <div className='mt-2 flex w-full items-start justify-between py-2 pl-3 hover:bg-gray-100'>
-                    <div className='h-[42px] w-[42px] border-[1px] border-solid border-gray-400'>
-                      <img
-                        src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lhctcb4fwr8z99_tn'
-                        alt='San Pham'
-                        className='h-full w-full object-cover'
-                      />
-                    </div>
-                    <div className='max-w-[68%] truncate text-sm font-light text-gray-600'>
-                      Kem Mụn SANTAGIFT - Trắng sáng - Ức chế sắt tố - Chống nắng - 20g
-                    </div>
-                    <div className='pr-3 text-end text-sm font-light text-orange'>155.000đ</div>
                   </div>
                 </div>
-                <div className='mr-3 mt-4 text-end'>
-                  <button className='mx-auto w-32 rounded-sm bg-orange py-2 text-center text-base text-white hover:brightness-110'>
-                    Xem Giỏ Hàng
-                  </button>
+              ) : (
+                <div className='flex h-[300px] w-[400px] flex-col items-center justify-center rounded-sm bg-white shadow'>
+                  <img src={img.NoCartProduct} alt='No-Product' className='h-[100px] w-[100px]' />
+                  <p className='text-sm font-light capitalize text-gray-500'>Chưa có sản phẩm</p>
                 </div>
-              </div>
+              )}
             </Popover>
           </div>
         </div>

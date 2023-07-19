@@ -1,14 +1,22 @@
-import { useContext } from 'react'
+import { Suspense, lazy, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import Profile from 'src/components/Profile'
+import NotPageFound from 'src/components/NotPageFound'
 import { Path } from 'src/contants/path'
 import { AuthConext } from 'src/contexts/AppContextAuth'
+import CartLayout from 'src/layouts/CartLayout'
 import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
-import Login from 'src/pages/Login'
 import ProductList from 'src/pages/ProductList'
-import Register from 'src/pages/Register'
+import UserLayout from 'src/pages/User/layouts/UserLayout'
+import NoMatchUser from 'src/pages/User/pages/NoMatchUser'
 
+const Login = lazy(() => import('src/pages/Login'))
+const Register = lazy(() => import('src/pages/Register'))
+const Profile = lazy(() => import('src/pages/User/pages/Profile'))
+const ChangePassword = lazy(() => import('src/pages/User/pages/ChangePassword'))
+const HistoryPurchase = lazy(() => import('src/pages/User/pages/HistoryPurchase'))
+const ProductDetail = lazy(() => import('src/pages/ProductDetail'))
+const Cart = lazy(() => import('src/pages/Cart'))
 const ProtectRouter = () => {
   const { isAuthentication } = useContext(AuthConext)
 
@@ -30,7 +38,9 @@ export default function useRootRoutes() {
           path: Path.register,
           element: (
             <RegisterLayout>
-              <Register />
+              <Suspense>
+                <Register />
+              </Suspense>
             </RegisterLayout>
           )
         },
@@ -38,7 +48,9 @@ export default function useRootRoutes() {
           path: Path.login,
           element: (
             <RegisterLayout>
-              <Login />
+              <Suspense>
+                <Login />
+              </Suspense>
             </RegisterLayout>
           )
         }
@@ -49,14 +61,73 @@ export default function useRootRoutes() {
       element: <ProtectRouter />,
       children: [
         {
-          path: Path.profile,
+          path: Path.user,
           element: (
             <MainLayout>
-              <Profile />
+              <UserLayout></UserLayout>
+            </MainLayout>
+          ),
+
+          children: [
+            {
+              index: true,
+              element: <NoMatchUser />
+            },
+            {
+              path: Path.profile,
+              element: (
+                <Suspense>
+                  <Profile />
+                </Suspense>
+              )
+            },
+            {
+              path: Path.changePassword,
+              element: (
+                <Suspense>
+                  <ChangePassword />
+                </Suspense>
+              )
+            },
+            {
+              path: Path.historyPurchase,
+              element: (
+                <Suspense>
+                  <HistoryPurchase />
+                </Suspense>
+              )
+            },
+            {
+              path: '*',
+              element: <NoMatchUser />
+            }
+          ]
+        },
+        {
+          path: Path.cart,
+          element: (
+            <CartLayout>
+              <Suspense>
+                <Cart />
+              </Suspense>
+            </CartLayout>
+          )
+        },
+        {
+          path: Path.nameId,
+          element: (
+            <MainLayout>
+              <Suspense>
+                <ProductDetail />
+              </Suspense>
             </MainLayout>
           )
         }
       ]
+    },
+    {
+      path: '*',
+      element: <NotPageFound />
     },
     {
       path: '/',
