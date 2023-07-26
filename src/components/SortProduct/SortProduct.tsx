@@ -1,16 +1,18 @@
-import { QueryConfig } from 'src/pages/ProductList/ProductList'
-import Button from '../Button'
-import Popover from '../Popover'
+import classNames from 'classnames'
+import omit from 'lodash/omit'
+import { useTranslation } from 'react-i18next'
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { orderConst, sortConst } from 'src/contants/product'
-import classNames from 'classnames'
+import { QueryConfig } from 'src/pages/ProductList/ProductList'
 import { ProductConfigParam } from 'src/types/product.type'
-import omit  from 'lodash/omit'
+import Button from '../Button'
+import Popover from '../Popover'
 type Props = {
   pageSize: number
   queryConfig: QueryConfig
 }
 export default function SortProduct({ pageSize, queryConfig }: Props) {
+  const { t } = useTranslation()
   const currentPage = Number(queryConfig.page)
   const navigate = useNavigate()
   const sortBy = queryConfig.sort_by || sortConst.createdAt
@@ -53,7 +55,7 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
   return (
     <div className='flex items-center justify-between rounded-sm bg-gray-bold px-6 py-3'>
       <div className='flex items-center gap-3'>
-        <span className='text-light text-sm'>Sắp xếp theo</span>
+        <span className='text-light text-sm'>{t('Sort.sort by')}</span>
         <div>
           <Button
             className={classNames('rounded-sm  px-3 py-2 text-sm capitalize shadow', {
@@ -62,7 +64,7 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
             })}
             onClick={() => handleSortClick('view')}
           >
-            Phổ Biến
+            {t('Sort.popular')}
           </Button>
         </div>
         <div>
@@ -73,7 +75,7 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
             })}
             onClick={() => handleSortClick('createdAt')}
           >
-            Mới Nhất
+            {t('Sort.lasest')}
           </Button>
         </div>
         <div>
@@ -84,7 +86,7 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
             })}
             onClick={() => handleSortClick('sold')}
           >
-            Bán chạy
+            {t('Sort.sell')}
           </Button>
         </div>
         <Popover
@@ -99,7 +101,7 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
                 }
               )}
             >
-              <span>Giá</span>
+              <span>{t('Sort.price by.price')}</span>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -118,7 +120,9 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
               className='flex w-full items-center justify-between hover:text-orange'
               onClick={() => handleSortClick('price', 'asc')}
             >
-              <span>Giá: Thấp đến Cao</span>
+              <span>
+                {t('Sort.price by.price')}: {t('Sort.price by.low')}
+              </span>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -137,7 +141,9 @@ export default function SortProduct({ pageSize, queryConfig }: Props) {
               className='mt-4 flex w-full items-center justify-between hover:text-orange'
               onClick={() => handleSortClick('price', 'desc')}
             >
-              <span>Giá: Cao đến Thấp</span>
+              <span>
+                {t('Sort.price by.price')}: {t('Sort.price by.high')}
+              </span>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'

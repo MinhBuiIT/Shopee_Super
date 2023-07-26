@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import authApi from 'src/apis/auth.api'
 import purchaseApi from 'src/apis/purchase.api'
@@ -8,12 +9,14 @@ import { PurchaseStatusConst } from 'src/contants/PurchaseStatus'
 import { Path } from 'src/contants/path'
 import { AuthConext } from 'src/contexts/AppContextAuth'
 import useSearchHeader from 'src/hooks/useSearchHeader'
+import { languageMode } from 'src/i18next/i18next'
 import { createLinkAvt, formatPrice } from 'src/utils/util'
 import Popover from '../Popover'
 
 const LIMIT_CART = 5
 export default function MainHeader() {
   const { register, onSubmit } = useSearchHeader()
+  const { i18n, t } = useTranslation('header')
   const queryClient = useQueryClient()
   const { setIsAuthentication, profile, setProfile, isAuthentication } = useContext(AuthConext)
 
@@ -34,6 +37,9 @@ export default function MainHeader() {
     setIsAuthentication(false)
     setProfile(null)
     navigate('/')
+  }
+  const handleChangeLang = (mode: 'vi' | 'en') => {
+    i18n.changeLanguage(mode)
   }
 
   return (
@@ -62,7 +68,7 @@ export default function MainHeader() {
                     />
                   </svg>
 
-                  <span>Tiếng Việt</span>
+                  <span>{languageMode[i18n.language as keyof typeof languageMode]}</span>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -77,17 +83,21 @@ export default function MainHeader() {
               }
             >
               <div className='flex w-32 flex-col rounded-sm bg-white py-3 pl-3 text-gray-700 shadow'>
-                <div className='text-sm hover:text-orange'>Tiếng Việt</div>
-                <div className='mt-4 text-sm hover:text-orange'>English</div>
+                <button className='text-left text-sm hover:text-orange' onClick={() => handleChangeLang('vi')}>
+                  Tiếng Việt
+                </button>
+                <button className='mt-4 text-left text-sm hover:text-orange' onClick={() => handleChangeLang('en')}>
+                  English
+                </button>
               </div>
             </Popover>
             {!profile ? (
               <div className='flex items-start'>
                 <Link to='/register' className='border-r-[1px] border-solid border-slate-300 px-2 hover:opacity-80'>
-                  Đăng ký
+                  {t('register')}
                 </Link>
                 <Link to='/login' className='px-2 hover:opacity-80'>
-                  Đăng nhập
+                  {t('log in')}
                 </Link>
               </div>
             ) : (
@@ -130,16 +140,16 @@ export default function MainHeader() {
               >
                 <div className='flex w-40 flex-col rounded-sm bg-white py-3 pl-3 text-gray-700 shadow'>
                   <Link to={'/' + Path.user + '/' + Path.profile} className='text-sm hover:text-greenPrimary'>
-                    Tài khoản của tôi
+                    {t('my account')}
                   </Link>
                   <Link to={'/' + Path.cart} className='mt-4 text-sm hover:text-greenPrimary'>
-                    Đơn mua
+                    {t('purchase order')}
                   </Link>
                   <button
                     className='mt-4 cursor-pointer text-left text-sm hover:text-greenPrimary'
                     onClick={handleLogout}
                   >
-                    Đăng xuất
+                    {t('log out')}
                   </button>
                 </div>
               </Popover>
@@ -161,7 +171,7 @@ export default function MainHeader() {
               <input
                 type='text'
                 id='search'
-                placeholder='Tìm kiếm sản phẩm'
+                placeholder={t('search')}
                 className='mr-3 w-[90%] py-3 outline-none'
                 {...register('search')}
               />
@@ -214,7 +224,7 @@ export default function MainHeader() {
             >
               {purchasesData && purchasesData.data.data.length !== 0 ? (
                 <div className=' w-[400px] rounded-sm bg-white py-3 shadow'>
-                  <h3 className='pl-3 text-[15px] font-light text-gray-300'>Sản Phẩm Mới Thêm</h3>
+                  <h3 className='pl-3 text-[15px] font-light text-gray-300'>{t('new purchase')}</h3>
                   <div className='mt-4 flex flex-col'>
                     {purchasesData.data.data.slice(0, LIMIT_CART).map((item) => {
                       return (
@@ -244,13 +254,13 @@ export default function MainHeader() {
                         {purchasesData.data.data.length - LIMIT_CART > 0
                           ? purchasesData.data.data.length - LIMIT_CART
                           : ''}{' '}
-                        Thêm Hàng Vào Giỏ
+                        {t('add goods to cart')}
                       </p>
                       <Link
                         to={'/' + Path.cart}
                         className=' w-32 rounded-sm bg-orange py-2 text-center text-base text-white hover:brightness-110'
                       >
-                        Xem Giỏ Hàng
+                        {t('see')}
                       </Link>
                     </div>
                   </div>

@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
+import SEO from 'src/SEO'
+import img from 'src/assets'
 
 export default function NotPageFound() {
   return (
     <div className='flex h-[calc(100vh-80px)] w-full items-center justify-center bg-white p-5'>
+      <SEO title='404 Not Found' description='Trang 404 Shopee clone' img={img.Shopee} name='404' type='summary'/>
       <div className='text-center'>
         <div className='inline-flex rounded-full bg-yellow-100 p-4'>
           <div className='rounded-full bg-yellow-200 stroke-yellow-600 p-4'>

@@ -1,15 +1,17 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import Input from 'src/components/Input'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { ResYup, schemaRes } from 'src/utils/rules'
-import { useMutation } from '@tanstack/react-query'
+import SEO from 'src/SEO'
 import authApi from 'src/apis/auth.api'
-import { isUnprocessableEntityErr } from 'src/utils/util'
-import { ErrorType } from 'src/types/ErrorType.type'
-import { useContext } from 'react'
-import { AuthConext } from 'src/contexts/AppContextAuth'
+import img from 'src/assets'
 import Button from 'src/components/Button'
+import Input from 'src/components/Input'
+import { AuthConext } from 'src/contexts/AppContextAuth'
+import { ErrorType } from 'src/types/ErrorType.type'
+import { ResYup, schemaRes } from 'src/utils/rules'
+import { isUnprocessableEntityErr } from 'src/utils/util'
 
 const schemaResgister = schemaRes.pick(['password', 'confirmPassword', 'email'])
 type FormResgister = Pick<ResYup, 'confirmPassword' | 'email' | 'password'>
@@ -52,6 +54,13 @@ export default function Register() {
 
   return (
     <div className=' bg-orange py-10'>
+      <SEO
+        title='Register'
+        description='Đăng ký Tài khoản Shopee và tận hưởng ưu đãi độc quyền với giá cả hấp dẫn trên Shopee Việt Nam!'
+        name='Minh Bui'
+        type='summary'
+        img={img.Shopee}
+      />
       <div className='container grid grid-cols-1 md:grid-cols-10'>
         <div className='col-span-4 hidden items-center justify-center text-7xl font-medium text-white md:flex'>
           Shopee
@@ -68,7 +77,7 @@ export default function Register() {
               errors={errors.email?.message}
             />
             <Input
-              className='mt-3 w-full'
+              className='mt-8 w-full'
               type='password'
               placeholder='Mật khẩu'
               label='password'
@@ -76,14 +85,14 @@ export default function Register() {
               errors={errors.password?.message}
             />
             <Input
-              className='mt-3 w-full'
+              className='mt-8 w-full'
               type='password'
               placeholder='Nhập lại mật khẩu'
               register={register}
               label='confirmPassword'
               errors={errors.confirmPassword?.message}
             />
-            <div className='mt-4 w-full'>
+            <div className='mt-8 w-full'>
               <Button
                 className='flex w-full items-center justify-center rounded-sm bg-orange py-3 text-center text-base font-normal uppercase text-white hover:opacity-90'
                 type='submit'

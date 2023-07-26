@@ -1,0 +1,18 @@
+{
+  "edit profile": "Edit Profile",
+  "my account": "My Account",
+  "change password": "Change Password",
+  "purchase order": "Purchase Order",
+  "my profile": "My Profile",
+  "my profile des": "Manage profile information for account security",
+  "form": {
+    "name": "Name",
+    "phone": "Phone Number",
+    "address": "Address",
+    "date": "Date of Birth",
+    "save": "Save"
+  },
+  "choose avt": "Choose Avatar",
+  "max size avt": "Maximum file size",
+  "format": "Format"
+}

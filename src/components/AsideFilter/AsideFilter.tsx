@@ -6,6 +6,7 @@ import omit from 'lodash/omit'
 import omitBy from 'lodash/omitBy'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { NavLink, createSearchParams, useNavigate } from 'react-router-dom'
 import { categoriesApi } from 'src/apis/categories.api'
 import { QueryConfig } from 'src/pages/ProductList/ProductList'
@@ -21,6 +22,7 @@ type Props = {
 }
 export type FormPriceType = WithoutNullableKeys<PriceType>
 export default function AsideFilter({ queryConfig }: Props) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const categoryParam = queryConfig.category
   const categoryQuery = useQuery({
@@ -90,7 +92,7 @@ export default function AsideFilter({ queryConfig }: Props) {
             d='M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z'
           />
         </svg>
-        <div className='ml-2 text-[15px] font-semibold capitalize text-gray-700'>Tất cả danh mục</div>
+        <div className='ml-2 text-[15px] font-semibold capitalize text-gray-700'>{t('Aside Filter.all filter')}</div>
       </NavLink>
       <div className='mt-5 h-[1px] w-[100%] bg-gray-300'></div>
       <ul className='mt-5 '>
@@ -127,7 +129,7 @@ export default function AsideFilter({ queryConfig }: Props) {
               <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
             </svg>
 
-            <span className='ml-2 capitalize'>Tất cả sản phẩm</span>
+            <span className='ml-2 capitalize'>{t('Aside Filter.all Product')}</span>
           </NavLink>
         </li>
         {categoryQuery.data &&
@@ -170,7 +172,7 @@ export default function AsideFilter({ queryConfig }: Props) {
       </ul>
       <div className='mt-5 h-[1px] w-[100%] bg-gray-300'></div>
       <div className='pt-4'>
-        <p className='text-base font-light text-gray-700'>Khoảng Giá</p>
+        <p className='text-base font-light text-gray-700'>{t('Aside Filter.price')}</p>
         <form className='mt-3' onSubmit={onSubmit}>
           <div className='flex items-center justify-between'>
             {/* <Controller
@@ -216,18 +218,18 @@ export default function AsideFilter({ queryConfig }: Props) {
           </div>
           <p className='text-light mt-1 min-h-[14px] text-xs text-red-400'>{errors.price_min?.message}</p>
           <Button addClass='py-[6px] mt-5 text-sm w-full' type='submit'>
-            Áp Dụng
+            {t('Aside Filter.apply')}
           </Button>
         </form>
       </div>
       <div className='mt-5 h-[1px] w-[100%] bg-gray-300'></div>
       <div className='pt-5'>
-        <p className='text-base font-light text-gray-700'>Đánh giá</p>
+        <p className='text-base font-light text-gray-700'>{t('Aside Filter.evaluate')}</p>
         <RatingStar queryConfig={queryConfig} />
       </div>
       <div className='mt-5 h-[1px] w-[100%] bg-gray-300'></div>
       <Button addClass='py-[6px] mt-5 text-sm w-full' onClick={handleRemoveFilter}>
-        Xóa Tất Cả
+        {t('Aside Filter.all delete')}
       </Button>
     </div>
   )

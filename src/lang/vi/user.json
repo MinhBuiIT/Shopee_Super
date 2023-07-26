@@ -1,0 +1,18 @@
+{
+  "edit profile": "Sửa Hồ Sơ",
+  "my account": "Tài Khoản Của Tôi",
+  "change password": "Đổi Mật Khẩu",
+  "purchase order": "Đơn Mua",
+  "my profile": "Hồ Sơ Của Tôi",
+  "my profile des": "Quản lý thông tin hồ sơ để bảo mật tài khoản",
+  "form": {
+    "name": "Tên",
+    "phone": "Số Điện Thoại",
+    "address": "Địa Chỉ",
+    "date": "Ngày Sinh",
+    "save": "Lưu"
+  },
+  "choose avt": "Chọn Ảnh",
+  "max size avt": "Dụng lượng file tối đa",
+  "format": "Định dạng"
+}

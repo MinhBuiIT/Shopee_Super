@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
+import { convert } from 'html-to-text'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import SEO from 'src/SEO'
 import productApi from 'src/apis/product.api'
 import purchaseApi from 'src/apis/purchase.api'
 import Button from 'src/components/Button'
@@ -14,6 +16,7 @@ import { Path } from 'src/contants/path'
 import useQueryConfig from 'src/hooks/useQueryConfig'
 import { ProductConfigParam } from 'src/types/product.type'
 import { discountFunc, formatPrice, formatSold, getIdNameUrl } from 'src/utils/util'
+
 
 export default function ProductDetail() {
   const queryClient = useQueryClient()
@@ -138,6 +141,13 @@ export default function ProductDetail() {
   if (!data) return null
   return (
     <div className='w-full bg-gray-100 pt-6'>
+      <SEO
+        title={data.name}
+        description={convert(data.description).slice(0, 100).trim()}
+        name='Minh Bui'
+        type='summary'
+        img={data.image}
+      />
       <div className='container rounded-sm bg-white p-3'>
         <div className='grid w-full grid-cols-12 gap-8'>
           <div className='col-span-4'>

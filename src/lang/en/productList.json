@@ -1,0 +1,22 @@
+{
+  "Aside Filter": {
+    "all filter": "All Filter",
+    "price": "Price",
+    "evaluate": "Evaluate",
+    "apply": "Apply",
+    "all delete": "All Delete",
+    "all Product": "All Product",
+    "above": "more"
+  },
+  "Sort": {
+    "sort by": "Sort By",
+    "popular": "Popular",
+    "lasest": "Lasest",
+    "sell": "Sell",
+    "price by": {
+      "price": "Price",
+      "low": "Low to High",
+      "high": "High to Low"
+    }
+  }
+}

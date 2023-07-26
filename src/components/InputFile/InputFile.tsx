@@ -2,8 +2,9 @@ import { useRef } from 'react'
 import { toast } from 'react-toastify'
 interface Props {
   onChange?: (value: File) => void
+  textBtn: string
 }
-export default function InputFile({ onChange }: Props) {
+export default function InputFile({ onChange, textBtn }: Props) {
   const refInputFile = useRef<HTMLInputElement>(null)
   const handleChooseAvt = () => {
     if (refInputFile.current) refInputFile.current.click()
@@ -38,7 +39,7 @@ export default function InputFile({ onChange }: Props) {
         type='button'
         onClick={handleChooseAvt}
       >
-        Chọn Ảnh
+        {textBtn}
       </button>
     </>
   )

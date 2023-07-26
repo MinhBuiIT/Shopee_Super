@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import Input from 'src/components/Input'
 import InputNumber from 'src/components/InputNumber'
 import { schemaUserType } from 'src/utils/rules'
@@ -10,23 +11,25 @@ export default function Infor() {
     control,
     formState: { errors }
   } = useFormContext<FormProfile>()
-
+  const { t } = useTranslation('user')
   return (
     <>
       <div className='mt-5 flex flex-col sm:mt-8 sm:flex-row sm:items-center'>
-        <div className='truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>Tên</div>
+        <div className='truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>
+          {t('form.name')}
+        </div>
         <Input
           classNameInput='px-[6px] py-[6px]  w-[100%]'
           className='sm:ml-5 sm:w-[80%]'
           register={register}
           label='name'
-          placeholder='Tên'
+          placeholder={t('form.name')}
           errors={errors.name?.message}
         />
       </div>
       <div className='mt-5 flex flex-col sm:mt-6 sm:flex-row sm:items-center'>
         <div className='mb-[14px] truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>
-          Số điện thoại
+          {t('form.phone')}
         </div>
         <Controller
           control={control}
@@ -48,7 +51,9 @@ export default function Infor() {
         />
       </div>
       <div className='mt-5 flex flex-col sm:mt-6 sm:flex-row sm:items-center'>
-        <div className='truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>Địa chỉ</div>
+        <div className='truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>
+          {t('form.address')}
+        </div>
         <Input
           classNameInput='px-[6px] py-[6px]  w-[100%]'
           className='sm:ml-5 sm:w-[80%]'

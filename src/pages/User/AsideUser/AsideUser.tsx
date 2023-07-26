@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 import { Path } from 'src/contants/path'
 import { AuthConext } from 'src/contexts/AppContextAuth'
@@ -7,6 +8,7 @@ import { createLinkAvt } from 'src/utils/util'
 
 export default function AsideUser() {
   const { profile } = useContext(AuthConext)
+  const { t } = useTranslation('user')
   return (
     <div className='ml-0 md:ml-12'>
       <div className='flex items-center border-b-[1px] border-gray-200 pb-5'>
@@ -48,7 +50,7 @@ export default function AsideUser() {
               />
             </svg>
 
-            <span className='font-light capitalize text-gray-400'>Sửa hồ sơ</span>
+            <span className='font-light capitalize text-gray-400'>{t('edit profile')}</span>
           </Link>
         </div>
       </div>
@@ -66,7 +68,7 @@ export default function AsideUser() {
               className='h-full w-full'
             />
           </div>
-          <span className='mt-[2px] capitalize transition-colors hover:text-orange'>Tài Khoản của tôi</span>
+          <span className='mt-[2px] capitalize transition-colors hover:text-orange'>{t('my account')}</span>
         </NavLink>
         <NavLink
           to={Path.changePassword}
@@ -91,7 +93,7 @@ export default function AsideUser() {
               <path strokeLinecap='round' strokeLinejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
             </svg>
           </div>
-          <span className='mt-[2px] capitalize transition-colors hover:text-orange'>Đổi mật khẩu</span>
+          <span className='mt-[2px] capitalize transition-colors hover:text-orange'>{t('change password')}</span>
         </NavLink>
         <NavLink
           to={Path.historyPurchase}
@@ -106,7 +108,7 @@ export default function AsideUser() {
               className='h-full w-full'
             />
           </div>
-          <span className='mt-[2px] capitalize transition-colors hover:text-orange'>Đơn Mua</span>
+          <span className='mt-[2px] capitalize transition-colors hover:text-orange'>{t('purchase order')}</span>
         </NavLink>
       </div>
     </div>

@@ -1,15 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import SEO from 'src/SEO'
 import authApi from 'src/apis/auth.api'
+import img from 'src/assets'
+import Button from 'src/components/Button'
 import Input from 'src/components/Input'
+import { AuthConext } from 'src/contexts/AppContextAuth'
+import { ErrorType } from 'src/types/ErrorType.type'
 import { LoginYup, schemaLogin } from 'src/utils/rules'
 import { isUnprocessableEntityErr } from 'src/utils/util'
-import { ErrorType } from 'src/types/ErrorType.type'
-import { useContext } from 'react'
-import { AuthConext } from 'src/contexts/AppContextAuth'
-import Button from 'src/components/Button'
 
 export default function Login() {
   const { setIsAuthentication, setProfile } = useContext(AuthConext)
@@ -25,7 +27,7 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: (body: LoginYup) => authApi.loginPost(body)
   })
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         setIsAuthentication(true)
@@ -49,6 +51,13 @@ export default function Login() {
   })
   return (
     <div className='bg-orange py-10'>
+      <SEO
+        title='Login'
+        description='Đăng nhập Tài khoản Shopee và tận hưởng ưu đãi độc quyền với giá cả hấp dẫn trên Shopee Việt Nam!'
+        name='Minh Bui'
+        type='summary'
+        img={img.Shopee}
+      />
       <div className=' container grid grid-cols-1 md:grid-cols-10'>
         <div className='col-span-4 hidden items-center justify-center text-7xl font-medium text-white md:flex'>
           Shopee
@@ -66,14 +75,14 @@ export default function Login() {
             />
 
             <Input
-              className='mt-3 w-full'
+              className='mt-8 w-full'
               type='password'
               placeholder='Mật Khẩu'
               register={register}
               label='password'
               errors={errors.password?.message}
             />
-            <div className='mt-5 w-full'>
+            <div className='mt-8 w-full'>
               <Button
                 className='flex w-full items-center justify-center rounded-sm bg-orange py-3 text-center text-base font-normal uppercase text-white hover:opacity-90'
                 type='submit'

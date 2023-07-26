@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import userApi, { UserUpdateType } from 'src/apis/user.api'
 import Button from 'src/components/Button'
 import InputFile from 'src/components/InputFile'
@@ -21,6 +22,7 @@ type FormErrProfile = Omit<FormProfile, 'date_of_birth'> & {
 const schemaUserForm = schemaUser.pick(['address', 'avatar', 'date_of_birth', 'name', 'phone'])
 export default function Profile() {
   const { setProfile } = useContext(AuthConext)
+  const { t } = useTranslation('user')
 
   const queryClient = useQueryClient()
   const [file, setFile] = useState<File | null>(null)
@@ -65,7 +67,7 @@ export default function Profile() {
 
       setValue('address', address)
       setValue('avatar', avatar)
-      setValue('date_of_birth', date_of_birth ? new Date(date_of_birth) : new Date())
+      setValue('date_of_birth', date_of_birth ? new Date(date_of_birth) : new Date(1990, 0, 1))
       setValue('name', name)
       setValue('phone', phone)
     }
@@ -109,8 +111,8 @@ export default function Profile() {
   return (
     <div className='mt-8 rounded-sm border-[1px] border-gray-200 bg-white px-5 pb-10 pt-4 shadow md:mt-0'>
       <div className='border-b-[1px] border-gray-200 pb-3'>
-        <div className='text-lg font-light capitalize text-gray-800'>hồ sơ của tôi</div>
-        <p className='mt-[2px] text-sm font-light text-gray-600'>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+        <div className='text-lg font-light capitalize text-gray-800'>{t('my profile')}</div>
+        <p className='mt-[2px] text-sm font-light text-gray-600'>{t('my profile des')}</p>
       </div>
       {userData && (
         <div className=' pt-5'>
@@ -136,6 +138,7 @@ export default function Profile() {
                           onChange={field.onChange}
                           value={field.value}
                           errors={errors.date_of_birth?.message}
+                          label={t('form.date')}
                         />
                       )
                     }}
@@ -148,7 +151,7 @@ export default function Profile() {
                       type='submit'
                       form='form-user'
                     >
-                      Lưu
+                      {t('form.save')}
                     </Button>
                   </div>
                 </div>
@@ -184,10 +187,10 @@ export default function Profile() {
                       )}
                     </div>
                     <div className='text-center'>
-                      <InputFile onChange={handleChangeInputFile} />
+                      <InputFile onChange={handleChangeInputFile} textBtn={t('choose avt')} />
                       <div className='mt-3 text-sm font-light text-gray-400'>
-                        <div>Dụng lượng file tối đa 1 MB</div>
-                        <div>Định dạng:.JPEG, .PNG</div>
+                        <div>{t('max size avt')} 1 MB</div>
+                        <div>{t('format')}:.JPEG, .PNG</div>
                       </div>
                     </div>
                   </div>

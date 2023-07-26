@@ -1,11 +1,12 @@
-import  range  from 'lodash/range'
+import range from 'lodash/range'
 import { useEffect, useState } from 'react'
 interface Props {
   onChange?: (value: Date) => void
   value?: Date
   errors?: string
+  label: string
 }
-export default function DateRender({ onChange, value, errors }: Props) {
+export default function DateRender({ onChange, value, errors, label }: Props) {
   const [date, setDate] = useState({
     day: value?.getDate() || 1,
     month: value?.getMonth() || 0,
@@ -34,7 +35,7 @@ export default function DateRender({ onChange, value, errors }: Props) {
 
   return (
     <div className='mt-5 flex flex-col sm:mt-6 sm:flex-row sm:items-center'>
-      <div className='truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>Ngày sinh</div>
+      <div className='truncate text-sm font-light capitalize text-gray-600 sm:w-[20%] sm:text-right'>{label}</div>
       <div className='mt-1 text-sm sm:ml-6 sm:mt-0 sm:w-[80%] '>
         <div className='flex'>
           <select

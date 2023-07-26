@@ -1,0 +1,22 @@
+{
+  "Aside Filter": {
+    "all filter": "Tất Cả Danh Mục",
+    "price": "Khoảng Giá",
+    "evaluate": "Đánh Giá",
+    "apply": "Áp Dụng",
+    "all delete": "Xóa Tất Cả",
+    "all Product": "Tất Cả Sản Phẩm",
+    "above": "trở lên"
+  },
+  "Sort": {
+    "sort by": "Sắp xếp theo",
+    "popular": "Phổ Biến",
+    "lasest": "Mới Nhất",
+    "sell": "Bán Chạy",
+    "price by": {
+      "price": "Giá",
+      "low": "Thấp đến Cao",
+      "high": "Cao đến Thấp"
+    }
+  }
+}

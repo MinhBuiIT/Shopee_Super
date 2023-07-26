@@ -2,7 +2,9 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { produce } from 'immer'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import SEO from 'src/SEO'
 import purchaseApi from 'src/apis/purchase.api'
+import img from 'src/assets'
 import Button from 'src/components/Button'
 import Modal from 'src/components/Modal'
 import QuantityProduct from 'src/components/QuatityProduct/QuantityProduct'
@@ -156,6 +158,13 @@ export default function Cart() {
   }
   return (
     <div className='bg-gray-light py-6'>
+      <SEO
+        title='Giỏ Hàng'
+        description='Đặt hàng để nhập nhiều ưu đãi'
+        name='Minh Bui'
+        type='summary'
+        img={img.Shopee}
+      />
       <div className='overflow-auto '>
         <div className='container min-w-[1000px]'>
           <div className='rounded-sm bg-white px-8 py-4 text-sm font-light capitalize shadow'>
