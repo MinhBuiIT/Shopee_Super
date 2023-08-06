@@ -17,7 +17,7 @@ describe('isUnprocessableEntityErr is testing', () => {
         new AxiosError(undefined, undefined, undefined, undefined, {
           status: HttpStatusCode.UnprocessableEntity,
           data: null,
-          config: {} as InternalAxiosRequestConfig<any>,
+          config: {} as InternalAxiosRequestConfig,
           headers: {},
           statusText: ''
         })
@@ -30,7 +30,7 @@ describe('isUnprocessableEntityErr is testing', () => {
         new AxiosError(undefined, undefined, undefined, undefined, {
           status: HttpStatusCode.InternalServerError,
           data: undefined,
-          config: {} as InternalAxiosRequestConfig<any>,
+          config: {} as InternalAxiosRequestConfig,
           headers: {},
           statusText: ''
         })
