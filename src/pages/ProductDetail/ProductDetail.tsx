@@ -17,7 +17,6 @@ import useQueryConfig from 'src/hooks/useQueryConfig'
 import { ProductConfigParam } from 'src/types/product.type'
 import { discountFunc, formatPrice, formatSold, getIdNameUrl } from 'src/utils/util'
 
-
 export default function ProductDetail() {
   const queryClient = useQueryClient()
   const queryParam = useQueryConfig()

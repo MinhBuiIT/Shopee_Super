@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
-import { UseFormRegister } from 'react-hook-form'
+import { FieldPath, FieldValues, UseFormRegister } from 'react-hook-form'
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props<T extends FieldValues> extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string
-  register?: UseFormRegister<any>
-  label?: string
+  register?: UseFormRegister<T>
+  label?: FieldPath<T>
   errors?: string
   classNameInput?: string
 }
-export default function Input({ className, label, register, errors, classNameInput, type, ...rest }: Props) {
+export default function Input<T extends FieldValues>({
+  className,
+  label,
+  register,
+  errors,
+  classNameInput,
+  type,
+  ...rest
+}: Props<T>) {
   const [showPassword, setShowPassword] = useState(false)
   const toggleShowPassword = () => {
     setShowPassword((pre) => !pre)
