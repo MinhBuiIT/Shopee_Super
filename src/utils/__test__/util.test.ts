@@ -1,6 +1,6 @@
 import { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import { HttpStatusCode } from 'src/contants/HttpStatus'
-import { describe, expect, it,beforeEach } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { isAxiosErr, isUnprocessableEntityErr } from '../util'
 
 describe('AxiosErr is testing', () => {
